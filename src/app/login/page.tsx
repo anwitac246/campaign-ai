@@ -9,6 +9,7 @@ import {
 } from 'firebase/auth';
 import { auth } from '../../../firebase-config';
 import { useRouter } from 'next/navigation';
+import Navbar from '../components/navbar';
 
 interface LoginProps { }
 
@@ -218,7 +219,8 @@ const Login: React.FC<LoginProps> = () => {
       `}</style>
 
       <div className="min-h-screen flex items-center justify-center p-4 gradient-bg">
-        <div className="flex login-container rounded-3xl shadow-2xl overflow-hidden max-w-6xl w-full h-[700px]">
+        <Navbar/>
+        <div className="flex login-container rounded-3xl shadow-2xl m-8 overflow-hidden max-w-6xl w-full h-[700px]">
           {/* Left Side - Image Section */}
           <div className="flex-1 relative hidden lg:flex flex-col justify-center items-center overflow-hidden">
             <div className="w-full h-full flex items-center justify-center">
@@ -238,16 +240,7 @@ const Login: React.FC<LoginProps> = () => {
                 <div>
                   <span className="text-sm font-light tracking-wider opacity-80">A WISE QUOTE</span>
                 </div>
-                <div>
-                  <h1 className="text-5xl text-black font-bold mb-6 leading-tight">
-                    Get<br />
-                    Everything<br />
-                    You Want
-                  </h1>
-                  <p className="text-lg text-black opacity-90 max-w-md">
-                    You can get everything you want if you work hard, trust the process, and stick to the plan.
-                  </p>
-                </div>
+                
               </div>
             </div>
           </div>

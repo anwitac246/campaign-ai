@@ -6,7 +6,7 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navItems = [
-    { name: "Features", href: "/features" },
+    { name: "Campaign", href: "/chatbot" },
     { name: "Pricing", href: "/pricing" },
     { name: "About", href: "/about" },
     { name: "Contact", href: "/contact" },
@@ -18,11 +18,9 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
             <div className="flex items-center">
-              <div className="w-8 h-8 bg-blue-800 rounded-lg mr-3 flex items-center justify-center">
-                <div className="w-4 h-4 bg-white rounded-sm"></div>
-              </div>
+              
               <span className="text-2xl font-bold text-black">
-                AI<span className="text-blue-800">Chat</span>
+                Campaign<span className="text-blue-800">AI</span>
               </span>
             </div>
           </div>

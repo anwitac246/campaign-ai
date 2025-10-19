@@ -28,8 +28,7 @@ import {
   Calendar,
   TrendingUp,
   CheckCircle,
-  XCircle,
-  Youtube 
+  XCircle
 } from 'lucide-react';
 
 interface Message {
@@ -51,7 +50,6 @@ interface Message {
   requiresFeedback?: boolean;
   feedbackStep?: string;
   feedbackReceived?: boolean;
-  canFinalize?: boolean;  // <-- ADD THIS
   data?: {
     strategy?: any;
     research?: any;
@@ -61,6 +59,7 @@ interface Message {
     imagePath?: string;
   };
 }
+
 interface ChatSession {
   id: string;
   title: string;
@@ -117,221 +116,6 @@ const GlowingEffect = ({ children, className = "" }: { children: React.ReactNode
     </div>
   );
 };
-const PostToYouTubeButton = ({ sessionId, onPostStart, onPostComplete, onPostError }: {
-  sessionId: string;
-  onPostStart: () => void;
-  onPostComplete: (result: any) => void;
-  onPostError: (error: string) => void;
-}) => {
-  const [isPosting, setIsPosting] = useState(false);
-  const [showScheduler, setShowScheduler] = useState(false);
-  const [scheduleDate, setScheduleDate] = useState('');
-  const [scheduleTime, setScheduleTime] = useState('');
-  const [videoDuration, setVideoDuration] = useState(3);
-  const [isScheduling, setIsScheduling] = useState(false);
-
-  const handlePostNow = async () => {
-    setIsPosting(true);
-    onPostStart();
-
-    try {
-      const response = await fetch('http://localhost:3005/api/campaign/post', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessionId })
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Upload failed');
-      }
-
-      const result = await response.json();
-      if (result.success) {
-        onPostComplete(result);
-      } else {
-        throw new Error(result.error || 'Upload failed');
-      }
-    } catch (error: any) {
-      console.error('Error posting to YouTube:', error);
-      onPostError(error.message || 'Failed to post to YouTube');
-    } finally {
-      setIsPosting(false);
-    }
-  };
-
-  const handleSchedule = async () => {
-    if (!scheduleDate || !scheduleTime) {
-      onPostError('Please select date and time');
-      return;
-    }
-
-    const scheduledDateTime = new Date(`${scheduleDate}T${scheduleTime}`);
-    if (scheduledDateTime <= new Date()) {
-      onPostError('Scheduled time must be in the future');
-      return;
-    }
-
-    setIsScheduling(true);
-    try {
-      const response = await fetch('http://localhost:3005/api/schedule-post', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sessionId,
-          scheduledAt: scheduledDateTime.toISOString(),
-          videoDuration
-        })
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Scheduling failed');
-      }
-
-      const result = await response.json();
-      onPostComplete({
-        success: true,
-        message: `Campaign scheduled for ${scheduledDateTime.toLocaleString()}`,
-        scheduled: true,
-        scheduledAt: scheduledDateTime
-      });
-      setShowScheduler(false);
-    } catch (error: any) {
-      console.error('Error scheduling post:', error);
-      onPostError(error.message || 'Failed to schedule post');
-    } finally {
-      setIsScheduling(false);
-    }
-  };
-
-  return (
-    <div className="mt-6 p-5 bg-gradient-to-r from-red-50 via-pink-50 to-orange-50 rounded-xl border-2 border-red-200 shadow-lg">
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex-1">
-          <h4 className="font-bold text-gray-900 flex items-center text-lg mb-2">
-            <Youtube className="h-6 w-6 mr-2 text-red-600" />
-            Ready to Post to YouTube!
-          </h4>
-          <p className="text-sm text-gray-700 leading-relaxed">
-            Your complete campaign is ready! Post it now or schedule it for later.
-          </p>
-        </div>
-      </div>
-      
-      {!showScheduler ? (
-        <div className="space-y-3">
-          <button
-            onClick={handlePostNow}
-            disabled={isPosting}
-            className="w-full flex items-center justify-center space-x-3 px-6 py-4 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed font-semibold shadow-md hover:shadow-xl transform hover:scale-105 disabled:transform-none"
-          >
-            {isPosting ? (
-              <>
-                <div className="flex space-x-1">
-                  <div className="w-2 h-2 rounded-full animate-bounce bg-white" style={{ animationDelay: '0ms' }} />
-                  <div className="w-2 h-2 rounded-full animate-bounce bg-white" style={{ animationDelay: '150ms' }} />
-                  <div className="w-2 h-2 rounded-full animate-bounce bg-white" style={{ animationDelay: '300ms' }} />
-                </div>
-                <span>Uploading to YouTube...</span>
-              </>
-            ) : (
-              <>
-                <Youtube className="h-5 w-5" />
-                <span>Post Now</span>
-              </>
-            )}
-          </button>
-          
-          <button
-            onClick={() => setShowScheduler(true)}
-            disabled={isPosting}
-            className="w-full flex items-center justify-center space-x-3 px-6 py-3 bg-white hover:bg-gray-50 text-gray-700 border-2 border-gray-300 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
-          >
-            <Calendar className="h-5 w-5" />
-            <span>Schedule for Later</span>
-          </button>
-        </div>
-      ) : (
-        <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
-              <input
-                type="date"
-                value={scheduleDate}
-                onChange={(e) => setScheduleDate(e.target.value)}
-                min={new Date().toISOString().split('T')[0]}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-sm"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Time</label>
-              <input
-                type="time"
-                value={scheduleTime}
-                onChange={(e) => setScheduleTime(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-sm"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Video Duration (seconds)</label>
-            <input
-              type="number"
-              value={videoDuration}
-              onChange={(e) => setVideoDuration(Number(e.target.value))}
-              min="1"
-              max="60"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-sm"
-            />
-          </div>
-
-          {scheduleDate && scheduleTime && (
-            <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
-              <p className="text-sm text-blue-800">
-                <strong>Will post on:</strong><br />
-                {new Date(`${scheduleDate}T${scheduleTime}`).toLocaleString()}
-              </p>
-            </div>
-          )}
-
-          <div className="flex space-x-3">
-            <button
-              onClick={handleSchedule}
-              disabled={isScheduling || !scheduleDate || !scheduleTime}
-              className="flex-1 flex items-center justify-center space-x-2 px-4 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
-            >
-              {isScheduling ? (
-                <>
-                  <div className="flex space-x-1">
-                    <div className="w-2 h-2 rounded-full animate-bounce bg-white" style={{ animationDelay: '0ms' }} />
-                    <div className="w-2 h-2 rounded-full animate-bounce bg-white" style={{ animationDelay: '150ms' }} />
-                    <div className="w-2 h-2 rounded-full animate-bounce bg-white" style={{ animationDelay: '300ms' }} />
-                  </div>
-                  <span>Scheduling...</span>
-                </>
-              ) : (
-                <>
-                  <Calendar className="h-5 w-5" />
-                  <span>Schedule Post</span>
-                </>
-              )}
-            </button>
-            <button
-              onClick={() => setShowScheduler(false)}
-              disabled={isScheduling}
-              className="px-4 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
 
 const FeedbackPanel = ({ 
   messageId, 
@@ -361,9 +145,9 @@ const FeedbackPanel = ({
     <div className="mt-4 p-4 bg-gradient-to-r from-violet-50 to-indigo-50 rounded-lg border border-violet-200">
       <div className="flex items-center justify-between mb-3">
         <p className="text-sm font-medium text-gray-700">
-          {feedbackStep === 'strategy' && '📊 Review the campaign strategy'}
-          {feedbackStep === 'copy' && '✍️ Review the marketing copy'}
-          {feedbackStep === 'image' && '🎨 Review the visual concept'}
+          {feedbackStep === 'strategy' && 'Review the campaign strategy'}
+          {feedbackStep === 'copy' && 'Review the marketing copy'}
+          {feedbackStep === 'image' && 'Review the visual concept'}
         </p>
       </div>
 
@@ -553,6 +337,137 @@ ${300 + imgData.length}
             {isDownloading ? 'Downloading...' : 'Download'}
           </span>
         </button>
+      </div>
+    </div>
+  );
+};
+
+const SchedulePostModal = ({ 
+  sessionId, 
+  onClose, 
+  onScheduled 
+}: { 
+  sessionId: string;
+  onClose: () => void;
+  onScheduled: () => void;
+}) => {
+  const [scheduledDate, setScheduledDate] = useState('');
+  const [scheduledTime, setScheduledTime] = useState('');
+  const [isScheduling, setIsScheduling] = useState(false);
+  const [scheduleResult, setScheduleResult] = useState<{ success: boolean; message?: string; error?: string } | null>(null);
+
+  const handleSchedule = async () => {
+    if (!scheduledDate || !scheduledTime) {
+      setScheduleResult({ success: false, error: 'Please select both date and time' });
+      return;
+    }
+
+    setIsScheduling(true);
+    setScheduleResult(null);
+
+    try {
+      const scheduledFor = new Date(`${scheduledDate}T${scheduledTime}`).toISOString();
+      
+      const response = await fetch('http://localhost:3005/api/campaign/schedule', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId, scheduledFor })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to schedule post');
+      }
+
+      setScheduleResult({
+        success: true,
+        message: data.message
+      });
+
+      setTimeout(() => {
+        onScheduled();
+        onClose();
+      }, 2000);
+
+    } catch (error: any) {
+      setScheduleResult({
+        success: false,
+        error: error.message
+      });
+    } finally {
+      setIsScheduling(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-xl font-bold text-gray-900 flex items-center">
+            <Calendar className="h-6 w-6 mr-2 text-violet-600" />
+            Schedule YouTube Post
+          </h3>
+          <button
+            onClick={onClose}
+            className="p-2 rounded-lg hover:bg-gray-100 text-gray-500"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Select Date
+            </label>
+            <input
+              type="date"
+              value={scheduledDate}
+              onChange={(e) => setScheduledDate(e.target.value)}
+              min={new Date().toISOString().split('T')[0]}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Select Time
+            </label>
+            <input
+              type="time"
+              value={scheduledTime}
+              onChange={(e) => setScheduledTime(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500"
+            />
+          </div>
+
+          {scheduleResult && (
+            <div className={`p-4 rounded-lg ${scheduleResult.success ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
+              <p className={`text-sm font-medium ${scheduleResult.success ? 'text-green-800' : 'text-red-800'}`}>
+                {scheduleResult.success ? '✅ ' + scheduleResult.message : '❌ ' + scheduleResult.error}
+              </p>
+            </div>
+          )}
+
+          <div className="flex space-x-3 pt-4">
+            <button
+              onClick={handleSchedule}
+              disabled={isScheduling || !scheduledDate || !scheduledTime}
+              className="flex-1 flex items-center justify-center space-x-2 px-4 py-3 bg-violet-600 hover:bg-violet-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+            >
+              <Calendar className="h-5 w-5" />
+              <span>{isScheduling ? 'Scheduling...' : 'Schedule Post'}</span>
+            </button>
+            <button
+              onClick={onClose}
+              disabled={isScheduling}
+              className="px-4 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg transition-colors font-medium"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -829,6 +744,212 @@ const MediaPlanDisplay = ({ mediaPlan }: { mediaPlan: any }) => {
   );
 };
 
+const CampaignActionButtons = ({ 
+  sessionId, 
+  onDownload, 
+  onPost 
+}: { 
+  sessionId: string;
+  onDownload: () => void;
+  onPost: () => void;
+}) => {
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [isPosting, setIsPosting] = useState(false);
+  const [showScheduleModal, setShowScheduleModal] = useState(false);
+  const [scheduledPosts, setScheduledPosts] = useState<any[]>([]);
+  const [postResult, setPostResult] = useState<{ success: boolean; videoUrl?: string; error?: string; details?: string; hint?: string } | null>(null);
+
+  useEffect(() => {
+    loadScheduledPosts();
+  }, [sessionId]);
+
+  const loadScheduledPosts = async () => {
+    try {
+      const response = await fetch(`http://localhost:3005/api/campaign/scheduled/${sessionId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setScheduledPosts(data.scheduledPosts || []);
+      }
+    } catch (error) {
+      console.error('Error loading scheduled posts:', error);
+    }
+  };
+
+  const cancelScheduledPost = async (scheduledPostId: string) => {
+    try {
+      const response = await fetch(`http://localhost:3005/api/campaign/scheduled/${scheduledPostId}`, {
+        method: 'DELETE'
+      });
+
+      if (response.ok) {
+        loadScheduledPosts();
+      }
+    } catch (error) {
+      console.error('Error cancelling scheduled post:', error);
+    }
+  };
+
+  const handleDownload = async () => {
+    setIsDownloading(true);
+    try {
+      const response = await fetch('http://localhost:3005/api/campaign/download', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Download failed');
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `campaign-${sessionId}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      
+      onDownload();
+    } catch (error: any) {
+      console.error('Download error:', error);
+      alert(`Failed to download campaign PDF: ${error.message}`);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  const handlePost = async () => {
+    setIsPosting(true);
+    setPostResult(null);
+    
+    try {
+      const response = await fetch('http://localhost:3005/api/campaign/post', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId })
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.details || data.error || 'Post failed');
+      }
+
+      setPostResult({
+        success: true,
+        videoUrl: data.videoUrl
+      });
+      
+      onPost();
+    } catch (error: any) {
+      setPostResult({
+        success: false,
+        error: error.message
+      });
+    } finally {
+      setIsPosting(false);
+    }
+  };
+
+  return (
+    <div className="mt-6 p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg border border-gray-200">
+      <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
+        <CheckCircle className="h-5 w-5 mr-2 text-green-600" />
+        Campaign Complete - Ready to Launch
+      </h4>
+      
+      <div className="flex items-center space-x-3 flex-wrap gap-2">
+        <button
+          onClick={handleDownload}
+          disabled={isDownloading}
+          className="flex items-center space-x-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+        >
+          <Download className="h-5 w-5" />
+          <span>{isDownloading ? 'Generating PDF...' : 'Download PDF'}</span>
+        </button>
+
+        <button
+          onClick={handlePost}
+          disabled={isPosting}
+          className="flex items-center space-x-2 px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+        >
+          <Upload className="h-5 w-5" />
+          <span>{isPosting ? 'Posting...' : 'Post Now'}</span>
+        </button>
+
+        <button
+          onClick={() => setShowScheduleModal(true)}
+          className="flex items-center space-x-2 px-6 py-3 bg-violet-600 hover:bg-violet-700 text-white rounded-lg transition-colors font-medium"
+        >
+          <Calendar className="h-5 w-5" />
+          <span>Schedule Post</span>
+        </button>
+      </div>
+
+      {scheduledPosts.filter(p => p.status === 'pending').length > 0 && (
+        <div className="mt-4 p-3 bg-violet-50 rounded-lg border border-violet-200">
+          <h5 className="text-sm font-semibold text-gray-900 mb-2">Scheduled Posts:</h5>
+          <div className="space-y-2">
+            {scheduledPosts.filter(p => p.status === 'pending').map(post => (
+              <div key={post.id} className="flex items-center justify-between text-sm bg-white p-2 rounded">
+                <div className="flex items-center space-x-2">
+                  <Calendar className="h-4 w-4 text-violet-600" />
+                  <span className="text-gray-700">
+                    {new Date(post.scheduledFor).toLocaleString()}
+                  </span>
+                  <span className="px-2 py-0.5 bg-yellow-100 text-yellow-700 rounded-full text-xs">
+                    {post.status}
+                  </span>
+                </div>
+                <button
+                  onClick={() => cancelScheduledPost(post.id)}
+                  className="text-red-600 hover:text-red-700 text-xs font-medium"
+                >
+                  Cancel
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {postResult && (
+        <div className={`mt-3 p-4 rounded-lg border-2 ${postResult.success ? 'bg-green-50 border-green-300' : 'bg-red-50 border-red-300'}`}>
+          {postResult.success ? (
+            <div>
+              <p className="text-green-800 font-medium mb-2">✅ Successfully posted to YouTube!</p>
+              <a 
+                href={postResult.videoUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:underline font-medium"
+              >
+                View video on YouTube →
+              </a>
+            </div>
+          ) : (
+            <div>
+              <p className="text-red-800 font-bold mb-2">❌ {postResult.error}</p>
+            </div>
+          )}
+        </div>
+      )}
+      
+      {showScheduleModal && (
+        <SchedulePostModal
+          sessionId={sessionId}
+          onClose={() => setShowScheduleModal(false)}
+          onScheduled={loadScheduledPosts}
+        />
+      )}
+    </div>
+  );
+};
+
 const MarketResearchDisplay = ({ research }: { research: any }) => {
   if (!research || !research.localInfluencers || research.localInfluencers.length === 0) {
     return null;
@@ -1001,6 +1122,8 @@ const MarkdownRenderer = ({ content }: { content: string }) => {
 };
 
 export default function Chatbot() {
+  const [user, setUser] = useState<any>(null);
+  const [userLoading, setUserLoading] = useState(true);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const [isListening, setIsListening] = useState(false);
@@ -1014,11 +1137,36 @@ export default function Chatbot() {
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
   const [editingContent, setEditingContent] = useState('');
   const [processingFeedback, setProcessingFeedback] = useState(false);
+  const [sessionsLoading, setSessionsLoading] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const recognitionRef = useRef<any>(null);
   const synthRef = useRef<SpeechSynthesis | null>(null);
+
+  const loadUserSessions = async (userId: string) => {
+    setSessionsLoading(true);
+    try {
+      const response = await fetch(`http://localhost:3005/api/sessions?userId=${userId}&limit=50`);
+      if (!response.ok) throw new Error('Failed to load sessions');
+      
+      const data = await response.json();
+      const sessions: ChatSession[] = data.sessions.map((s: any) => ({
+        id: s.id,
+        title: s.title,
+        messages: [],
+        createdAt: new Date(s.createdAt),
+        updatedAt: new Date(s.updatedAt)
+      }));
+      
+      setChatSessions(sessions);
+    } catch (error) {
+      console.error('Error loading sessions:', error);
+      setError('Failed to load chat history');
+    } finally {
+      setSessionsLoading(false);
+    }
+  };
 
   useEffect(() => {
     scrollToBottom();
@@ -1069,19 +1217,58 @@ export default function Chatbot() {
     setMessages([]);
   };
 
-  const loadChat = (sessionId: string) => {
-    const session = chatSessions.find(s => s.id === sessionId);
-    if (session) {
-      setMessages(session.messages);
+  const loadChat = async (sessionId: string) => {
+    try {
+      const response = await fetch(`http://localhost:3005/api/sessions/${sessionId}`);
+      if (!response.ok) throw new Error('Failed to load session');
+      
+      const data = await response.json();
+      
+      const loadedMessages: Message[] = data.messages.map((msg: any) => ({
+        id: msg.id,
+        type: msg.type,
+        content: msg.content,
+        timestamp: new Date(msg.timestamp),
+        agentType: msg.agentType,
+        file: msg.file,
+        imageData: msg.imageData,
+        isEdited: msg.isEdited,
+        requiresFeedback: msg.requiresFeedback,
+        feedbackStep: msg.feedbackStep,
+        feedbackReceived: msg.feedbackReceived,
+        data: {
+          strategy: data.campaignStrategy,
+          research: data.marketResearch,
+          copy: data.campaignContent,
+          visualConcept: data.visualConcept,
+          mediaPlan: data.mediaPlan
+        }
+      }));
+      
+      setMessages(loadedMessages);
       setCurrentSessionId(sessionId);
+    } catch (error) {
+      console.error('Error loading chat:', error);
+      setError('Failed to load conversation');
     }
   };
 
-  const deleteChat = (sessionId: string) => {
-    setChatSessions(prev => prev.filter(s => s.id !== sessionId));
-    if (currentSessionId === sessionId) {
-      setCurrentSessionId(null);
-      setMessages([]);
+  const deleteChat = async (sessionId: string) => {
+    try {
+      const response = await fetch(`http://localhost:3005/api/sessions/${sessionId}`, {
+        method: 'DELETE'
+      });
+      
+      if (!response.ok) throw new Error('Failed to delete session');
+      
+      setChatSessions(prev => prev.filter(s => s.id !== sessionId));
+      if (currentSessionId === sessionId) {
+        setCurrentSessionId(null);
+        setMessages([]);
+      }
+    } catch (error) {
+      console.error('Error deleting chat:', error);
+      setError('Failed to delete conversation');
     }
   };
 
@@ -1125,7 +1312,6 @@ export default function Chatbot() {
 
       const data = await response.json();
 
-      // Mark current message as feedback received
       const updatedMessages = messages.map(msg => 
         msg.id === messageId 
           ? { ...msg, feedbackReceived: true, requiresFeedback: false }
@@ -1133,23 +1319,23 @@ export default function Chatbot() {
       );
 
       const botMessage: Message = {
-  id: Date.now().toString(),
-  type: data.agentType === 'general' ? 'bot' : 'agent',
-  content: data.response,
-  timestamp: new Date(),
-  agentType: data.agentType,
-  requiresFeedback: data.requiresFeedback || false,
-  feedbackStep: data.feedbackStep || null,
-  feedbackReceived: false,
-  canFinalize: data.canFinalize || false,  // <-- ADD THIS LINE
-  ...(data.imagePath && {
-    imageData: {
-      path: data.imagePath,
-      mimeType: 'image/png'
-    }
-  }),
-  ...(data.data && { data: data.data })
-};
+        id: Date.now().toString(),
+        type: data.agentType === 'general' ? 'bot' : 'agent',
+        content: data.response,
+        timestamp: new Date(),
+        agentType: data.agentType,
+        requiresFeedback: data.requiresFeedback || false,
+        feedbackStep: data.feedbackStep || null,
+        feedbackReceived: false,
+        ...(data.imagePath && {
+          imageData: {
+            path: data.imagePath,
+            mimeType: 'image/png'
+          }
+        }),
+        ...(data.data && { data: data.data })
+      };
+
       const finalMessages = [...updatedMessages, botMessage];
       setMessages(finalMessages);
       updateChatSession(finalMessages);
@@ -1316,6 +1502,10 @@ export default function Chatbot() {
       formData.append('message', userMessage.content);
       formData.append('sessionId', currentSessionId || Date.now().toString());
       
+      if (user) {
+        formData.append('userId', user.uid);
+      }
+      
       if (uploadedFile) {
         formData.append('file', uploadedFile);
       }
@@ -1340,27 +1530,30 @@ export default function Chatbot() {
       const data = await response.json();
 
       const botMessage: Message = {
-  id: (Date.now() + 1).toString(),
-  type: data.agentType === 'general' ? 'bot' : 'agent',
-  content: data.response,
-  timestamp: new Date(),
-  agentType: data.agentType,
-  requiresFeedback: data.requiresFeedback || false,
-  feedbackStep: data.feedbackStep || null,
-  feedbackReceived: false,
-  canFinalize: data.canFinalize || false,  // <-- ADD THIS LINE
-  ...(data.imagePath && {
-    imageData: {
-      path: data.imagePath,
-      mimeType: 'image/png'
-    }
-  }),
-  ...(data.data && { data: data.data })
-};
+        id: (Date.now() + 1).toString(),
+        type: data.agentType === 'general' ? 'bot' : 'agent',
+        content: data.response,
+        timestamp: new Date(),
+        agentType: data.agentType,
+        requiresFeedback: data.requiresFeedback || false,
+        feedbackStep: data.feedbackStep || null,
+        feedbackReceived: false,
+        ...(data.imagePath && {
+          imageData: {
+            path: data.imagePath,
+            mimeType: 'image/png'
+          }
+        }),
+        ...(data.data && { data: data.data })
+      };
 
       const updatedMessages = [...newMessages, botMessage];
       setMessages(updatedMessages);
       updateChatSession(updatedMessages);
+      
+      if (user) {
+        loadUserSessions(user.uid);
+      }
 
     } catch (error) {
       console.error('Error sending message:', error);
@@ -1381,7 +1574,7 @@ export default function Chatbot() {
   };
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
+    <div className="min-h-screen flex bg-[#FFFAE2]">
       {error && (
         <div className="fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg z-50">
           <div className="flex items-center justify-between">
@@ -1393,17 +1586,17 @@ export default function Chatbot() {
         </div>
       )}
 
-      <div className={`${showSidebar ? 'w-64' : 'w-12'} transition-all duration-300 bg-white border-r border-gray-200 flex flex-col`}>
+      <div className={`${showSidebar ? 'w-64' : 'w-16'} transition-all duration-300 bg-[#FFFAE2] border-r border-gray-200 flex flex-col fixed left-0 top-0 bottom-0 z-10`}>
         <div className="p-3 border-b border-gray-200">
           <div className="flex items-center justify-between">
             <button
               onClick={() => setShowSidebar(!showSidebar)}
-              className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              className="p-2 rounded-lg hover:bg-[#F2C34F] transition-colors"
             >
               <Menu className="h-5 w-5 text-gray-600" />
             </button>
             {showSidebar && (
-              <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors">
+              <button className="p-2 rounded-lg hover:bg-[#F2C34F] transition-colors">
                 <Search className="h-5 w-5 text-gray-600" />
               </button>
             )}
@@ -1413,7 +1606,7 @@ export default function Chatbot() {
         <div className="p-3">
           <button
             onClick={createNewChat}
-            className={`${showSidebar ? 'w-full justify-start px-3 py-2' : 'w-8 h-8 justify-center p-0'} flex items-center space-x-2 rounded-lg hover:bg-gray-100 transition-colors text-gray-700`}
+            className={`${showSidebar ? 'w-full justify-start px-3 py-2' : 'w-8 h-8 justify-center p-0'} flex items-center space-x-2 rounded-lg hover:bg-[#F2C34F] transition-colors text-gray-700`}
           >
             <Edit className="h-4 w-4 flex-shrink-0" />
             {showSidebar && <span className="text-sm font-medium">New chat</span>}
@@ -1422,14 +1615,14 @@ export default function Chatbot() {
 
         {showSidebar && (
           <>
-            <div className="px-3 pb-3">
+            <div className="px-4 pb-3">
               <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Gems</h3>
               <div className="space-y-1">
-                <button className="w-full flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors text-left">
+                <button className="w-full flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-[#F2C34F] transition-colors text-left">
                   <BookOpen className="h-4 w-4 text-teal-600" />
                   <span className="text-sm text-gray-700">Campaign Creator</span>
                 </button>
-                <button className="w-full flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors text-left">
+                <button className="w-full flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-[#F2C34F] transition-colors text-left">
                   <Compass className="h-4 w-4 text-gray-600" />
                   <span className="text-sm text-gray-700">Explore Gems</span>
                 </button>
@@ -1439,7 +1632,16 @@ export default function Chatbot() {
             <div className="flex-1 overflow-y-auto px-3">
               <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Recent</h3>
               <div className="space-y-1">
-                {chatSessions.length === 0 ? (
+                {sessionsLoading ? (
+                  <div className="py-4 text-center">
+                    <div className="flex items-center justify-center space-x-2">
+                      <div className="w-2 h-2 rounded-full animate-bounce bg-violet-400" style={{ animationDelay: '0ms' }} />
+                      <div className="w-2 h-2 rounded-full animate-bounce bg-violet-400" style={{ animationDelay: '150ms' }} />
+                      <div className="w-2 h-2 rounded-full animate-bounce bg-violet-400" style={{ animationDelay: '300ms' }} />
+                    </div>
+                    <p className="text-xs text-gray-400 mt-2">Loading chats...</p>
+                  </div>
+                ) : chatSessions.length === 0 ? (
                   <p className="text-xs text-gray-400 py-4">No recent conversations</p>
                 ) : (
                   chatSessions.map((session) => (
@@ -1478,8 +1680,8 @@ export default function Chatbot() {
         )}
       </div>
 
-      <div className="flex-1 flex flex-col">
-        <div className="flex-1 overflow-y-auto p-6">
+      <div className={`flex-1 flex flex-col ${showSidebar ? 'ml-64' : 'ml-16'} transition-all duration-300`}>
+        <div className="flex-1 overflow-y-auto p-6 pb-32">
           {messages.length === 0 && (
             <div className="text-center py-16">
               <h1 className="text-4xl font-bold text-gray-900 mb-4">
@@ -1489,33 +1691,51 @@ export default function Chatbot() {
                 Your intelligent marketing campaign assistant. Generate strategies, copy, and visuals in seconds.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
-                <GlowingEffect className="h-full">
-                  <div className="p-6 bg-white rounded-xl border border-gray-200 hover:border-violet-300 transition-all duration-200 h-full shadow-sm hover:shadow-md">
-                    <div className="w-12 h-12 bg-violet-100 rounded-lg flex items-center justify-center mb-4">
-                      <MessageSquare className="h-6 w-6 text-violet-600" />
+                {[{
+                  bg: '#9ECAD6',
+                  iconBg: '#9ECAD6',
+                  icon: <MessageSquare className="h-6 w-6" />,
+                  title: 'Create Campaigns',
+                  desc: 'Generate complete campaign packages with strategy, copy, and visuals'
+                },
+                {
+                  bg: '#F5CBCB',
+                  iconBg: '#F5CBCB',
+                  icon: <Upload className="h-6 w-6 " />,
+                  title: 'Upload Briefs',
+                  desc: 'Analyze documents and generate targeted marketing content'
+                },
+                {
+                  bg: '#F2C34F',
+                  iconBg: '#F2C34F',
+                  icon: <ImageIcon className="h-6 w-6 " />,
+                  title: 'Visual Generation',
+                  desc: 'Create stunning visuals with AI-powered image generation'
+                }].map((card, i) => (
+                  <GlowingEffect key={i} className="h-full">
+                    <div
+                      className="relative rounded-3xl p-8 overflow-hidden flex flex-col items-center justify-start text-center"
+                      style={{
+                        background: card.bg,
+                        borderTop: '2px solid black',
+                        borderLeft: '2px solid black',
+                        borderRight: '6px solid black',
+                        borderBottom: '6px solid black',
+                        height: '100%',       
+                        minHeight: '200px',  
+                      }}
+                    >
+                      <div
+                        className="w-12 h-12 rounded-lg flex items-center justify-center mb-4"
+                        style={{ background: card.iconBg }}
+                      >
+                        {card.icon}
+                      </div>
+                      <h4 className="font-semibold text-gray-900 mb-2">{card.title}</h4>
+                      <p className="text-sm text-gray-600">{card.desc}</p>
                     </div>
-                    <h4 className="font-semibold text-gray-900 mb-2">Create Campaigns</h4>
-                    <p className="text-sm text-gray-600">Generate complete campaign packages with strategy, copy, and visuals</p>
-                  </div>
-                </GlowingEffect>
-                <GlowingEffect className="h-full">
-                  <div className="p-6 bg-white rounded-xl border border-gray-200 hover:border-violet-300 transition-all duration-200 h-full shadow-sm hover:shadow-md">
-                    <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
-                      <Upload className="h-6 w-6 text-indigo-600" />
-                    </div>
-                    <h4 className="font-semibold text-gray-900 mb-2">Upload Briefs</h4>
-                    <p className="text-sm text-gray-600">Analyze documents and generate targeted marketing content</p>
-                  </div>
-                </GlowingEffect>
-                <GlowingEffect className="h-full">
-                  <div className="p-6 bg-white rounded-xl border border-gray-200 hover:border-violet-300 transition-all duration-200 h-full shadow-sm hover:shadow-md">
-                    <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                      <ImageIcon className="h-6 w-6 text-purple-600" />
-                    </div>
-                    <h4 className="font-semibold text-gray-900 mb-2">Visual Generation</h4>
-                    <p className="text-sm text-gray-600">Create stunning visuals with AI-powered image generation</p>
-                  </div>
-                </GlowingEffect>
+                  </GlowingEffect>
+                ))}
               </div>
             </div>
           )}
@@ -1523,13 +1743,13 @@ export default function Chatbot() {
           {messages.map((message) => (
             <div key={message.id} className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'} mb-6`}>
               <GlowingEffect>
-                <div className={`max-w-xs lg:max-w-3xl px-5 py-4 rounded-2xl ${
+                <div className={`max-w-xs lg:max-w-3xl px-3 py-2 rounded-2xl ${
                   message.type === 'user'
-                    ? 'bg-violet-600 text-white'
-                    : 'bg-white text-gray-900 border border-gray-200 shadow-sm'
+                    ? 'bg-[#76BDC3] text-white'
+                    : ' text-gray-900 border border-gray-200 shadow-sm'
                 }`}>
-                  <div className="flex items-start space-x-3">
-                    <div className="flex-1">
+                  <div className="flex items-start space-x-3 ">
+                    <div className="flex-1 ">
                       {message.file && (
                         <div className={`mb-3 p-3 rounded-lg ${
                           message.type === 'user' ? 'bg-violet-500/50' : 'bg-gray-50'
@@ -1548,13 +1768,13 @@ export default function Chatbot() {
                           <textarea
                             value={editingContent}
                             onChange={(e) => setEditingContent(e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-violet-500"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2"
                             rows={3}
                           />
                           <div className="flex space-x-2">
                             <button
                               onClick={() => saveEditedMessage(message.id)}
-                              className="flex items-center space-x-1 px-3 py-1 bg-violet-600 text-white rounded-lg hover:bg-violet-700 text-sm"
+                              className="flex items-center space-x-1 px-3 py-1  text-white rounded-lg hover:bg-violet-700 text-sm"
                             >
                               <Save className="h-3 w-3" />
                               <span>Save</span>
@@ -1583,16 +1803,23 @@ export default function Chatbot() {
                           {message.data?.mediaPlan && (
                             <MediaPlanDisplay mediaPlan={message.data.mediaPlan} />
                           )}
-                          
+                          {message.agentType === 'full_campaign' && !message.requiresFeedback && currentSessionId && (
+                              <CampaignActionButtons
+                                sessionId={currentSessionId}
+                                onDownload={() => console.log('Downloaded')}
+                                onPost={() => console.log('Posted to YouTube')}
+                              />
+                            )}
                           {message.imageData && (
                             <div className="mt-4 space-y-3">
                               <div className="rounded-lg overflow-hidden border border-gray-200 shadow-md">
                                 <img
-                                  src={`http://localhost:3005/${message.imageData.path}`}
+                                  src={`http://localhost:3005/${message.imageData.path.replace(/\\/g, '/')}`}
                                   alt="Generated campaign visual"
                                   className="w-full h-auto"
                                   onError={(e) => {
                                     console.error('Image failed to load:', message.imageData?.path);
+                                    console.log('Attempted URL:', `http://localhost:3005/${message.imageData?.path}`);
                                     e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect fill="%23f3f4f6" width="400" height="300"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" fill="%236b7280" font-size="16"%3EImage not available%3C/text%3E%3C/svg%3E';
                                   }}
                                 />
@@ -1612,40 +1839,12 @@ export default function Chatbot() {
                           )}
                         </>
                       )}
-                      {message.canFinalize && !message.requiresFeedback && currentSessionId && (
-  <PostToYouTubeButton
-    sessionId={currentSessionId}
-    onPostStart={() => {
-      console.log('Starting YouTube upload...');
-    }}
-    onPostComplete={(result) => {
-      const successMessage: Message = {
-        id: Date.now().toString(),
-        type: 'bot',
-        content: `✅ **Successfully Posted to YouTube!**\n\n🎥 **Video URL:** ${result.videoUrl}\n\n📺 **Video ID:** ${result.videoId}\n\nYour campaign video is now live on YouTube!`,
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, successMessage]);
-      updateChatSession([...messages, successMessage]);
-    }}
-    onPostError={(error) => {
-      setError(error);
-      const errorMessage: Message = {
-        id: Date.now().toString(),
-        type: 'bot',
-        content: `❌ Failed to post to YouTube: ${error}\n\nPlease make sure:\n1. You've run \`node post.js --auth\` and completed OAuth\n2. The oauth_credentials.json file is in the project root\n3. The token.json file exists after authorization`,
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, errorMessage]);
-      updateChatSession([...messages, errorMessage]);
-    }}
-  />
-)}
+                      
                       {(message.type === 'bot' || message.type === 'agent') && editingMessageId !== message.id && !message.requiresFeedback && (
-                        <div className="flex items-center space-x-2 mt-3">
+                        <div className="flex items-center space-x-2 mt-3 bg-white">
                           <button
                             onClick={() => isSpeaking ? stopSpeaking() : speakText(message.content)}
-                            className="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-gray-700 transition-all"
+                            className="p-2 rounded-lg bg-white hover:bg-gray-100 text-gray-500 hover:text-gray-700 transition-all"
                           >
                             {isSpeaking ? (
                               <VolumeX className="h-4 w-4" />
@@ -1660,7 +1859,7 @@ export default function Chatbot() {
                             <Edit className="h-4 w-4" />
                           </button>
                           {message.agentType && (
-                            <span className="text-xs px-2 py-1 bg-violet-100 text-violet-700 rounded-full font-medium">
+                            <span className="text-xs px-2 py-1  rounded-full font-medium">
                               {message.agentType === 'full_campaign' ? 'Full Campaign' : 
                                message.agentType === 'strategy' ? 'Strategy' :
                                message.agentType === 'copywriting' ? 'Copy' :
@@ -1698,7 +1897,7 @@ export default function Chatbot() {
           <div ref={messagesEndRef} />
         </div>
 
-        <div className="p-6 bg-white border-t border-gray-200">
+        <div className={`fixed bottom-0 right-0 ${showSidebar ? 'left-64' : 'left-16'} transition-all duration-300 p-6 border-t border-gray-200 bg-[#FFFAE2] z-10`}>
           {uploadedFile && (
             <GlowingEffect>
               <div className="mb-4 p-4 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-between">
@@ -1708,9 +1907,7 @@ export default function Chatbot() {
                   ) : (
                     <File className="h-5 w-5 text-gray-600" />
                   )}
-                  <span className="text-sm font-medium text-gray-900">
-                    {uploadedFile.name}
-                  </span>
+                  <span className="text-sm font-medium text-gray-900">{uploadedFile.name}</span>
                 </div>
                 <button
                   onClick={() => setUploadedFile(null)}
@@ -1722,55 +1919,53 @@ export default function Chatbot() {
             </GlowingEffect>
           )}
 
-          <div className="flex items-end space-x-3">
+          <div className="flex items-center space-x-3">
             <GlowingEffect>
               <button
                 onClick={() => fileInputRef.current?.click()}
-                className="p-3 rounded-xl bg-gray-100 hover:bg-gray-200 transition-all"
+                className="p-3 rounded-xl bg-[#F5CBCB]  flex items-center justify-center  hover:border-2 border-black"
               >
-                <Paperclip className="h-5 w-5 text-gray-600" />
+                <Paperclip className="h-5 w-5" />
               </button>
             </GlowingEffect>
 
             <GlowingEffect>
               <button
                 onClick={isListening ? stopListening : startListening}
-                className={`p-3 rounded-xl transition-all ${
+                className={`p-3 rounded-xl flex items-center justify-center hover:border-2 border-black ${
                   isListening
-                    ? 'bg-red-500 hover:bg-red-600 text-white'
-                    : 'bg-gray-100 hover:bg-gray-200 text-gray-600'
+                    ? 'bg-red-500 hover:bg-red-600 '
+                    : 'bg-[#F5CBCB] hover:bg-[#F5CBCB]/90 '
                 }`}
               >
                 {isListening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
               </button>
             </GlowingEffect>
 
-            <div className="flex-1 relative">
-              <GlowingEffect className="w-full">
-                <textarea
-                  value={inputText}
-                  onChange={(e) => setInputText(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault();
-                      sendMessage();
-                    }
-                  }}
-                  placeholder="Describe your campaign or marketing brief..."
-                  className="w-full px-5 py-4 rounded-2xl border border-gray-300 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 resize-none text-gray-900 placeholder-gray-500 transition-all"
-                  rows={1}
-                  style={{ maxHeight: '120px' }}
-                />
-              </GlowingEffect>
-            </div>
+            <GlowingEffect className="flex-1">
+              <textarea
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                  }
+                }}
+                placeholder="Describe your campaign or marketing brief..."
+                className={`w-full px-5 py-2 rounded-2xl border border-gray-300 text-black placeholder-gray-500
+                  hover:border-black focus:border-black focus:ring-0`}
+                rows={1}
+              />
+            </GlowingEffect>
 
             <GlowingEffect>
               <button
                 onClick={() => sendMessage()}
                 disabled={!inputText.trim() && !uploadedFile}
-                className={`p-3 rounded-xl transition-all ${
+                className={`p-3 rounded-xl flex items-center justify-center  hover:border-2 border-black ${
                   inputText.trim() || uploadedFile
-                    ? 'bg-violet-600 hover:bg-violet-700 text-white shadow-md'
+                    ? 'bg-[#9ECAD6] hover:bg-[#9ECAD6]/90 shadow-md'
                     : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                 }`}
               >
