@@ -66,7 +66,7 @@ export default function CampaignAI() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="text-6xl md:text-6xl font-bold mb-6 text-blue-600 leading-tight">
-                About Relatus.AI with AI and Productivity
+                About CampaignAI with AI and Productivity
               </h1>
               <p className="text-xl text-gray-700 mb-8 leading-relaxed">
                 Wherever you are should not be a factor in what you do. Brilliant well-being and productivity at one time will change the way the world works.
@@ -212,7 +212,7 @@ export default function CampaignAI() {
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <div className="text-2xl font-bold mb-4">Relatus.AI</div>
+              <div className="text-2xl font-bold mb-4">CampaignAI</div>
               <p className="text-slate-300">AI-powered campaign generation for modern marketers</p>
             </div>
             <div>

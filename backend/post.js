@@ -357,7 +357,7 @@ class YouTubeVideoPoster {
     
     // Add footer
     description += '---\n';
-    description += 'Created with Relatus.AI - AI-Powered Marketing Campaign Generator\n';
+    description += 'Created with CampaignAI - AI-Powered Marketing Campaign Generator\n';
     description += 'https://relatusai.com\n';
     
     // Truncate to YouTube's 5000 character limit
@@ -462,7 +462,7 @@ async function main() {
   // Help command
   if (args.length === 0 || args.includes('--help') || args.includes('-h')) {
     console.log('\n╔════════════════════════════════════════════════════════╗');
-    console.log('║   YouTube Video Generator & Uploader for Relatus.AI    ║');
+    console.log('║   YouTube Video Generator & Uploader for CampaignAI    ║');
     console.log('╚════════════════════════════════════════════════════════╝\n');
     console.log('USAGE:');
     console.log('  node post.js <command> [options]\n');

@@ -845,7 +845,7 @@ Return JSON format:
       
       messages.unshift({
         role: 'system',
-        content: 'You are Relatus.AI, a helpful AI assistant specialized in marketing. Be professional yet friendly.'
+        content: 'You are CampaignAI, a helpful AI assistant specialized in marketing. Be professional yet friendly.'
       });
       
       messages.push({
@@ -1895,7 +1895,7 @@ module.exports = { ScheduledPost };
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
   console.log('\n╔════════════════════════════════════════════════════════╗');
-  console.log('║         RELATUS.AI - CAMPAIGN ORCHESTRATOR            ║');
+  console.log('║         CampaignAI - CAMPAIGN ORCHESTRATOR            ║');
   console.log('╚════════════════════════════════════════════════════════╝\n');
   console.log('Available Endpoints:');
   console.log('');
