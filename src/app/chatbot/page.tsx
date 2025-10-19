@@ -108,7 +108,7 @@ const GlowingEffect = ({ children, className = "" }: { children: React.ReactNode
           style={{
             left: mousePosition.x,
             top: mousePosition.y,
-            background: 'radial-gradient(circle, rgba(139, 69, 255, 0.6) 0%, rgba(99, 102, 241, 0.3) 50%, transparent 70%)'
+            background: 'radial-gradient(circle, rgba(30, 144, 255, 0.6) 0%, rgba(70, 130, 180, 0.3) 50%, transparent 70%)'
           }}
         />
       )}
@@ -142,9 +142,9 @@ const FeedbackPanel = ({
   };
 
   return (
-    <div className="mt-4 p-4 bg-gradient-to-r from-violet-50 to-indigo-50 rounded-lg border border-violet-200">
+    <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-300">
       <div className="flex items-center justify-between mb-3">
-        <p className="text-sm font-medium text-gray-700">
+        <p className="text-sm font-medium text-gray-900">
           {feedbackStep === 'strategy' && 'Review the campaign strategy'}
           {feedbackStep === 'copy' && 'Review the marketing copy'}
           {feedbackStep === 'image' && 'Review the visual concept'}
@@ -176,7 +176,7 @@ const FeedbackPanel = ({
             value={feedbackText}
             onChange={(e) => setFeedbackText(e.target.value)}
             placeholder="Describe the changes you'd like to make..."
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-violet-500 resize-none"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
             rows={3}
             disabled={isProcessing}
           />
@@ -184,7 +184,7 @@ const FeedbackPanel = ({
             <button
               onClick={handleReject}
               disabled={!feedbackText.trim() || isProcessing}
-              className="flex items-center space-x-2 px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Send className="h-4 w-4" />
               <span className="font-medium">Submit Feedback</span>
@@ -195,7 +195,7 @@ const FeedbackPanel = ({
                 setFeedbackText('');
               }}
               disabled={isProcessing}
-              className="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-700 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-900 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Cancel
             </button>
@@ -206,9 +206,9 @@ const FeedbackPanel = ({
       {isProcessing && (
         <div className="mt-3 flex items-center space-x-2 text-sm text-gray-600">
           <div className="flex space-x-1">
-            <div className="w-2 h-2 rounded-full animate-bounce bg-violet-400" style={{ animationDelay: '0ms' }} />
-            <div className="w-2 h-2 rounded-full animate-bounce bg-violet-400" style={{ animationDelay: '150ms' }} />
-            <div className="w-2 h-2 rounded-full animate-bounce bg-violet-400" style={{ animationDelay: '300ms' }} />
+            <div className="w-2 h-2 rounded-full animate-bounce bg-blue-500" style={{ animationDelay: '0ms' }} />
+            <div className="w-2 h-2 rounded-full animate-bounce bg-blue-500" style={{ animationDelay: '150ms' }} />
+            <div className="w-2 h-2 rounded-full animate-bounce bg-blue-500" style={{ animationDelay: '300ms' }} />
           </div>
           <span>Processing your feedback...</span>
         </div>
@@ -317,11 +317,11 @@ ${300 + imgData.length}
 
   return (
     <div className="relative inline-block">
-      <div className="flex items-center space-x-2 bg-violet-50 rounded-lg p-2">
+      <div className="flex items-center space-x-2 bg-blue-50 rounded-lg p-2">
         <select
           value={downloadFormat}
           onChange={(e) => setDownloadFormat(e.target.value as 'png' | 'jpeg' | 'pdf')}
-          className="px-3 py-1 text-sm bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500"
+          className="px-3 py-1 text-sm bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="png">PNG</option>
           <option value="jpeg">JPEG</option>
@@ -330,7 +330,7 @@ ${300 + imgData.length}
         <button
           onClick={handleDownload}
           disabled={isDownloading}
-          className="flex items-center space-x-2 px-4 py-1 bg-violet-600 hover:bg-violet-700 text-white rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center space-x-2 px-4 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Download className="h-4 w-4" />
           <span className="text-sm font-medium">
@@ -405,7 +405,7 @@ const SchedulePostModal = ({
       <div className="bg-white rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-xl font-bold text-gray-900 flex items-center">
-            <Calendar className="h-6 w-6 mr-2 text-violet-600" />
+            <Calendar className="h-6 w-6 mr-2 text-blue-600" />
             Schedule YouTube Post
           </h3>
           <button
@@ -418,7 +418,7 @@ const SchedulePostModal = ({
 
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-900 mb-2">
               Select Date
             </label>
             <input
@@ -426,19 +426,19 @@ const SchedulePostModal = ({
               value={scheduledDate}
               onChange={(e) => setScheduledDate(e.target.value)}
               min={new Date().toISOString().split('T')[0]}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-900 mb-2">
               Select Time
             </label>
             <input
               type="time"
               value={scheduledTime}
               onChange={(e) => setScheduledTime(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -454,7 +454,7 @@ const SchedulePostModal = ({
             <button
               onClick={handleSchedule}
               disabled={isScheduling || !scheduledDate || !scheduledTime}
-              className="flex-1 flex items-center justify-center space-x-2 px-4 py-3 bg-violet-600 hover:bg-violet-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+              className="flex-1 flex items-center justify-center space-x-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
             >
               <Calendar className="h-5 w-5" />
               <span>{isScheduling ? 'Scheduling...' : 'Schedule Post'}</span>
@@ -462,7 +462,7 @@ const SchedulePostModal = ({
             <button
               onClick={onClose}
               disabled={isScheduling}
-              className="px-4 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg transition-colors font-medium"
+              className="px-4 py-3 bg-gray-200 hover:bg-gray-300 text-gray-900 rounded-lg transition-colors font-medium"
             >
               Cancel
             </button>
@@ -479,7 +479,7 @@ const StrategyToggle = ({ strategy }: { strategy: any }) => {
   if (!strategy) return null;
 
   return (
-    <div className="mt-4 border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
+    <div className="mt-4 border border-gray-300 rounded-lg overflow-hidden bg-blue-50">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between px-4 py-3 bg-white hover:bg-gray-50 transition-colors"
@@ -489,21 +489,21 @@ const StrategyToggle = ({ strategy }: { strategy: any }) => {
       </button>
       
       {isOpen && (
-        <div className="p-4 space-y-3 text-sm">
+        <div className="p-4 space-y-3 text-sm bg-white">
           <div>
-            <span className="font-semibold text-gray-700">Core Message:</span>
-            <p className="text-gray-600 mt-1">{strategy.coreMessage}</p>
+            <span className="font-semibold text-gray-900">Core Message:</span>
+            <p className="text-gray-700 mt-1">{strategy.coreMessage}</p>
           </div>
           
           <div>
-            <span className="font-semibold text-gray-700">Tone:</span>
-            <p className="text-gray-600 mt-1">{strategy.tone}</p>
+            <span className="font-semibold text-gray-900">Tone:</span>
+            <p className="text-gray-700 mt-1">{strategy.tone}</p>
           </div>
           
           {strategy.targetAudience && (
             <div>
-              <span className="font-semibold text-gray-700">Target Audience:</span>
-              <p className="text-gray-600 mt-1">{strategy.targetAudience.primary}</p>
+              <span className="font-semibold text-gray-900">Target Audience:</span>
+              <p className="text-gray-700 mt-1">{strategy.targetAudience.primary}</p>
               {strategy.targetAudience.demographics && (
                 <p className="text-gray-600 text-xs mt-1">Demographics: {strategy.targetAudience.demographics}</p>
               )}
@@ -512,15 +512,15 @@ const StrategyToggle = ({ strategy }: { strategy: any }) => {
           
           {strategy.targetChannels && strategy.targetChannels.length > 0 && (
             <div>
-              <span className="font-semibold text-gray-700">Target Channels:</span>
-              <p className="text-gray-600 mt-1">{strategy.targetChannels.join(', ')}</p>
+              <span className="font-semibold text-gray-900">Target Channels:</span>
+              <p className="text-gray-700 mt-1">{strategy.targetChannels.join(', ')}</p>
             </div>
           )}
           
           {strategy.keyMessagingPillars && strategy.keyMessagingPillars.length > 0 && (
             <div>
-              <span className="font-semibold text-gray-700">Key Messaging Pillars:</span>
-              <ul className="text-gray-600 mt-1 space-y-1">
+              <span className="font-semibold text-gray-900">Key Messaging Pillars:</span>
+              <ul className="text-gray-700 mt-1 space-y-1">
                 {strategy.keyMessagingPillars.map((pillar: string, index: number) => (
                   <li key={index} className="ml-4">• {pillar}</li>
                 ))}
@@ -539,7 +539,7 @@ const MediaPlanDisplay = ({ mediaPlan }: { mediaPlan: any }) => {
   if (!mediaPlan) return null;
 
   return (
-    <div className="mt-4 border border-blue-200 rounded-lg overflow-hidden bg-blue-50">
+    <div className="mt-4 border border-blue-300 rounded-lg overflow-hidden bg-blue-50">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between px-4 py-3 bg-white hover:bg-gray-50 transition-colors"
@@ -552,26 +552,26 @@ const MediaPlanDisplay = ({ mediaPlan }: { mediaPlan: any }) => {
       </button>
       
       {isOpen && (
-        <div className="p-4 space-y-4">
+        <div className="p-4 space-y-4 bg-white">
           {mediaPlan.channelStrategy && mediaPlan.channelStrategy.length > 0 && (
-            <div className="bg-white rounded-lg p-4 border border-gray-200">
+            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
               <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
                 <TrendingUp className="h-4 w-4 mr-2 text-blue-600" />
                 Channel Strategy
               </h4>
               <div className="overflow-x-auto">
                 <table className="min-w-full text-sm">
-                  <thead className="bg-gray-50">
+                  <thead className="bg-blue-100">
                     <tr>
-                      <th className="px-3 py-2 text-left font-semibold text-gray-700">Channel</th>
-                      <th className="px-3 py-2 text-left font-semibold text-gray-700">Role</th>
-                      <th className="px-3 py-2 text-left font-semibold text-gray-700">Focus</th>
-                      <th className="px-3 py-2 text-left font-semibold text-gray-700">Content Mix</th>
+                      <th className="px-3 py-2 text-left font-semibold text-gray-900">Channel</th>
+                      <th className="px-3 py-2 text-left font-semibold text-gray-900">Role</th>
+                      <th className="px-3 py-2 text-left font-semibold text-gray-900">Focus</th>
+                      <th className="px-3 py-2 text-left font-semibold text-gray-900">Content Mix</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     {mediaPlan.channelStrategy.map((channel: any, index: number) => (
-                      <tr key={index} className="hover:bg-gray-50">
+                      <tr key={index} className="hover:bg-gray-100">
                         <td className="px-3 py-2 font-medium text-gray-900">{channel.channel}</td>
                         <td className="px-3 py-2">
                           <span className={`px-2 py-1 rounded-full text-xs font-medium ${
@@ -580,8 +580,8 @@ const MediaPlanDisplay = ({ mediaPlan }: { mediaPlan: any }) => {
                             {channel.role}
                           </span>
                         </td>
-                        <td className="px-3 py-2 text-gray-600">{channel.focus}</td>
-                        <td className="px-3 py-2 text-gray-600">{channel.contentMix}</td>
+                        <td className="px-3 py-2 text-gray-700">{channel.focus}</td>
+                        <td className="px-3 py-2 text-gray-700">{channel.contentMix}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -591,33 +591,33 @@ const MediaPlanDisplay = ({ mediaPlan }: { mediaPlan: any }) => {
           )}
 
           {mediaPlan.postingSchedule && mediaPlan.postingSchedule.length > 0 && (
-            <div className="bg-white rounded-lg p-4 border border-gray-200">
+            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
               <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
                 <Calendar className="h-4 w-4 mr-2 text-blue-600" />
                 Weekly Posting Schedule
               </h4>
               <div className="overflow-x-auto">
                 <table className="min-w-full text-sm">
-                  <thead className="bg-gray-50">
+                  <thead className="bg-blue-100">
                     <tr>
-                      <th className="px-3 py-2 text-left font-semibold text-gray-700">Day</th>
-                      <th className="px-3 py-2 text-left font-semibold text-gray-700">Time</th>
-                      <th className="px-3 py-2 text-left font-semibold text-gray-700">Platform</th>
-                      <th className="px-3 py-2 text-left font-semibold text-gray-700">Content Type</th>
-                      <th className="px-3 py-2 text-left font-semibold text-gray-700">Reason</th>
+                      <th className="px-3 py-2 text-left font-semibold text-gray-900">Day</th>
+                      <th className="px-3 py-2 text-left font-semibold text-gray-900">Time</th>
+                      <th className="px-3 py-2 text-left font-semibold text-gray-900">Platform</th>
+                      <th className="px-3 py-2 text-left font-semibold text-gray-900">Content Type</th>
+                      <th className="px-3 py-2 text-left font-semibold text-gray-900">Reason</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     {mediaPlan.postingSchedule.map((post: any, index: number) => (
-                      <tr key={index} className="hover:bg-gray-50">
+                      <tr key={index} className="hover:bg-gray-100">
                         <td className="px-3 py-2 font-medium text-gray-900">{post.day}</td>
-                        <td className="px-3 py-2 text-gray-600">{post.time}</td>
+                        <td className="px-3 py-2 text-gray-700">{post.time}</td>
                         <td className="px-3 py-2">
-                          <span className="px-2 py-1 bg-violet-100 text-violet-700 rounded-full text-xs font-medium">
+                          <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
                             {post.platform}
                           </span>
                         </td>
-                        <td className="px-3 py-2 text-gray-600">{post.contentType}</td>
+                        <td className="px-3 py-2 text-gray-700">{post.contentType}</td>
                         <td className="px-3 py-2 text-gray-600 text-xs">{post.reason}</td>
                       </tr>
                     ))}
@@ -628,11 +628,11 @@ const MediaPlanDisplay = ({ mediaPlan }: { mediaPlan: any }) => {
           )}
 
           {mediaPlan.recommendedContentTypes && mediaPlan.recommendedContentTypes.length > 0 && (
-            <div className="bg-white rounded-lg p-4 border border-gray-200">
+            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
               <h4 className="font-semibold text-gray-900 mb-3">Recommended Content Types</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {mediaPlan.recommendedContentTypes.map((content: any, index: number) => (
-                  <div key={index} className="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                  <div key={index} className="p-3 bg-white rounded-lg border border-gray-200">
                     <div className="flex items-center justify-between mb-2">
                       <span className="font-medium text-gray-900">{content.type}</span>
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${
@@ -643,10 +643,10 @@ const MediaPlanDisplay = ({ mediaPlan }: { mediaPlan: any }) => {
                         {content.priority}
                       </span>
                     </div>
-                    <div className="text-sm text-gray-600 mb-1">
+                    <div className="text-sm text-gray-700 mb-1">
                       Frequency: <span className="font-medium">{content.frequency}</span>
                     </div>
-                    <div className="text-xs text-gray-500">{content.rationale}</div>
+                    <div className="text-xs text-gray-600">{content.rationale}</div>
                   </div>
                 ))}
               </div>
@@ -654,11 +654,11 @@ const MediaPlanDisplay = ({ mediaPlan }: { mediaPlan: any }) => {
           )}
 
           {mediaPlan.collaborationIdeas && mediaPlan.collaborationIdeas.length > 0 && (
-            <div className="bg-white rounded-lg p-4 border border-gray-200">
+            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
               <h4 className="font-semibold text-gray-900 mb-3">Collaboration Opportunities</h4>
               <div className="space-y-3">
                 {mediaPlan.collaborationIdeas.map((collab: any, index: number) => (
-                  <div key={index} className="p-3 bg-purple-50 rounded-lg border border-purple-200">
+                  <div key={index} className="p-3 bg-blue-50 rounded-lg border border-blue-200">
                     <div className="font-medium text-gray-900 mb-1">{collab.type}</div>
                     <div className="text-sm text-gray-700 mb-1">{collab.suggestion}</div>
                     <div className="flex items-center space-x-4 text-xs text-gray-600">
@@ -672,12 +672,12 @@ const MediaPlanDisplay = ({ mediaPlan }: { mediaPlan: any }) => {
           )}
 
           {mediaPlan.contentCalendar && (
-            <div className="bg-white rounded-lg p-4 border border-gray-200">
+            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
               <h4 className="font-semibold text-gray-900 mb-3">Content Calendar Overview</h4>
               <div className="space-y-3">
                 {mediaPlan.contentCalendar.themes && mediaPlan.contentCalendar.themes.length > 0 && (
                   <div>
-                    <span className="text-sm font-semibold text-gray-700">Weekly Themes:</span>
+                    <span className="text-sm font-semibold text-gray-900">Weekly Themes:</span>
                     <div className="flex flex-wrap gap-2 mt-2">
                       {mediaPlan.contentCalendar.themes.map((theme: string, index: number) => (
                         <span key={index} className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">
@@ -690,7 +690,7 @@ const MediaPlanDisplay = ({ mediaPlan }: { mediaPlan: any }) => {
                 
                 {mediaPlan.contentCalendar.campaigns && mediaPlan.contentCalendar.campaigns.length > 0 && (
                   <div>
-                    <span className="text-sm font-semibold text-gray-700">Mini Campaigns:</span>
+                    <span className="text-sm font-semibold text-gray-900">Mini Campaigns:</span>
                     <div className="flex flex-wrap gap-2 mt-2">
                       {mediaPlan.contentCalendar.campaigns.map((campaign: string, index: number) => (
                         <span key={index} className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs">
@@ -703,7 +703,7 @@ const MediaPlanDisplay = ({ mediaPlan }: { mediaPlan: any }) => {
                 
                 {mediaPlan.contentCalendar.events && mediaPlan.contentCalendar.events.length > 0 && (
                   <div>
-                    <span className="text-sm font-semibold text-gray-700">Key Events:</span>
+                    <span className="text-sm font-semibold text-gray-900">Key Events:</span>
                     <div className="flex flex-wrap gap-2 mt-2">
                       {mediaPlan.contentCalendar.events.map((event: string, index: number) => (
                         <span key={index} className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs">
@@ -718,20 +718,20 @@ const MediaPlanDisplay = ({ mediaPlan }: { mediaPlan: any }) => {
           )}
 
           {mediaPlan.budgetAllocation && (
-            <div className="bg-white rounded-lg p-4 border border-gray-200">
+            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
               <h4 className="font-semibold text-gray-900 mb-3">Budget Allocation</h4>
               <div className="grid grid-cols-2 gap-4 mb-3">
                 <div className="p-3 bg-green-50 rounded-lg border border-green-200">
-                  <div className="text-sm text-gray-600">Organic Content</div>
+                  <div className="text-sm text-gray-700">Organic Content</div>
                   <div className="text-2xl font-bold text-green-700">{mediaPlan.budgetAllocation.organic}</div>
                 </div>
                 <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
-                  <div className="text-sm text-gray-600">Paid Advertising</div>
+                  <div className="text-sm text-gray-700">Paid Advertising</div>
                   <div className="text-2xl font-bold text-blue-700">{mediaPlan.budgetAllocation.paid}</div>
                 </div>
               </div>
               {mediaPlan.budgetAllocation.recommendations && (
-                <div className="text-sm text-gray-700 bg-gray-50 p-3 rounded-lg">
+                <div className="text-sm text-gray-700 bg-white p-3 rounded-lg border border-gray-200">
                   <span className="font-semibold">Recommendations: </span>
                   {mediaPlan.budgetAllocation.recommendations}
                 </div>
@@ -856,7 +856,7 @@ const CampaignActionButtons = ({
   };
 
   return (
-    <div className="mt-6 p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg border border-gray-200">
+    <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-gray-300">
       <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
         <CheckCircle className="h-5 w-5 mr-2 text-green-600" />
         Campaign Complete - Ready to Launch
@@ -883,7 +883,7 @@ const CampaignActionButtons = ({
 
         <button
           onClick={() => setShowScheduleModal(true)}
-          className="flex items-center space-x-2 px-6 py-3 bg-violet-600 hover:bg-violet-700 text-white rounded-lg transition-colors font-medium"
+          className="flex items-center space-x-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium"
         >
           <Calendar className="h-5 w-5" />
           <span>Schedule Post</span>
@@ -891,14 +891,14 @@ const CampaignActionButtons = ({
       </div>
 
       {scheduledPosts.filter(p => p.status === 'pending').length > 0 && (
-        <div className="mt-4 p-3 bg-violet-50 rounded-lg border border-violet-200">
+        <div className="mt-4 p-3 bg-blue-100 rounded-lg border border-blue-300">
           <h5 className="text-sm font-semibold text-gray-900 mb-2">Scheduled Posts:</h5>
           <div className="space-y-2">
             {scheduledPosts.filter(p => p.status === 'pending').map(post => (
               <div key={post.id} className="flex items-center justify-between text-sm bg-white p-2 rounded">
                 <div className="flex items-center space-x-2">
-                  <Calendar className="h-4 w-4 text-violet-600" />
-                  <span className="text-gray-700">
+                  <Calendar className="h-4 w-4 text-blue-600" />
+                  <span className="text-gray-900">
                     {new Date(post.scheduledFor).toLocaleString()}
                   </span>
                   <span className="px-2 py-0.5 bg-yellow-100 text-yellow-700 rounded-full text-xs">
@@ -957,16 +957,16 @@ const MarketResearchDisplay = ({ research }: { research: any }) => {
 
   return (
     <div className="mt-4 space-y-4">
-      <div className="border border-gray-200 rounded-lg bg-white p-4">
+      <div className="border border-gray-300 rounded-lg bg-white p-4">
         <h4 className="font-semibold text-gray-900 mb-3">Local Influencers</h4>
         <div className="space-y-3">
           {research.localInfluencers.map((influencer: any, index: number) => (
-            <div key={index} className="p-3 bg-gray-50 rounded-lg">
+            <div key={index} className="p-3 bg-blue-50 rounded-lg border border-gray-200">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="font-medium text-gray-900">{influencer.name}</div>
-                  <div className="text-sm text-gray-600">{influencer.username}</div>
-                  <div className="text-xs text-gray-500 mt-1">
+                  <div className="text-sm text-gray-700">{influencer.username}</div>
+                  <div className="text-xs text-gray-600 mt-1">
                     Followers: {influencer.followers?.toLocaleString() || 'N/A'}
                     {influencer.engagementRate && ` • Engagement: ${influencer.engagementRate}`}
                   </div>
@@ -979,7 +979,7 @@ const MarketResearchDisplay = ({ research }: { research: any }) => {
       </div>
 
       {research.outreachMessages && research.outreachMessages.length > 0 && (
-        <div className="border border-gray-200 rounded-lg bg-white p-4">
+        <div className="border border-gray-300 rounded-lg bg-white p-4">
           <h4 className="font-semibold text-gray-900 mb-3">Outreach Messages</h4>
           <div className="space-y-3">
             {research.outreachMessages.map((outreach: any, index: number) => (
@@ -988,7 +988,7 @@ const MarketResearchDisplay = ({ research }: { research: any }) => {
                 {outreach.subject && (
                   <div className="text-sm text-gray-700 mb-2">Subject: {outreach.subject}</div>
                 )}
-                <div className="text-sm text-gray-600 whitespace-pre-wrap">{outreach.message}</div>
+                <div className="text-sm text-gray-700 whitespace-pre-wrap">{outreach.message}</div>
               </div>
             ))}
           </div>
@@ -996,11 +996,11 @@ const MarketResearchDisplay = ({ research }: { research: any }) => {
       )}
 
       {research.trendingHashtags && research.trendingHashtags.length > 0 && (
-        <div className="border border-gray-200 rounded-lg bg-white p-4">
+        <div className="border border-gray-300 rounded-lg bg-white p-4">
           <h4 className="font-semibold text-gray-900 mb-2">Trending Hashtags</h4>
           <div className="flex flex-wrap gap-2">
             {research.trendingHashtags.map((tag: string, index: number) => (
-              <span key={index} className="px-3 py-1 bg-violet-100 text-violet-700 rounded-full text-sm">
+              <span key={index} className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
                 {tag}
               </span>
             ))}
@@ -1059,14 +1059,14 @@ const MarkdownRenderer = ({ content }: { content: string }) => {
     return parts.map((part, index) => {
       if (part.type === 'codeblock') {
         return (
-          <div key={index} className="my-4 rounded-lg overflow-hidden bg-gray-50 border border-gray-200">
-            <div className="flex justify-between items-center px-4 py-2 bg-gray-100 border-b border-gray-200">
-              <span className="text-sm font-medium text-gray-600">
+          <div key={index} className="my-4 rounded-lg overflow-hidden bg-gray-900 border border-gray-700">
+            <div className="flex justify-between items-center px-4 py-2 bg-gray-800 border-b border-gray-700">
+              <span className="text-sm font-medium text-gray-300">
                 {part.language}
               </span>
               <button
                 onClick={() => copyToClipboard(part.content || '', part.id || '')}
-                className="flex items-center space-x-1 px-2 py-1 rounded text-xs hover:bg-gray-200 text-gray-600"
+                className="flex items-center space-x-1 px-2 py-1 rounded text-xs hover:bg-gray-700 text-gray-300"
               >
                 {copiedCode === part.id ? (
                   <>
@@ -1081,7 +1081,7 @@ const MarkdownRenderer = ({ content }: { content: string }) => {
                 )}
               </button>
             </div>
-            <pre className="p-4 overflow-x-auto text-sm text-gray-800">
+            <pre className="p-4 overflow-x-auto text-sm text-gray-100">
               <code>{part.content}</code>
             </pre>
           </div>
@@ -1104,12 +1104,12 @@ const MarkdownRenderer = ({ content }: { content: string }) => {
       .replace(/^### (.*$)/gm, '<h3 class="text-lg font-semibold mt-4 mb-2 text-gray-900">$1</h3>')
       .replace(/^## (.*$)/gm, '<h2 class="text-xl font-semibold mt-4 mb-2 text-gray-900">$1</h2>')
       .replace(/^# (.*$)/gm, '<h1 class="text-2xl font-bold mt-4 mb-2 text-gray-900">$1</h1>')
-      .replace(/\*\*(.*?)\*\*/g, '<strong class="text-gray-900">$1</strong>')
-      .replace(/\*(.*?)\*/g, '<em class="text-gray-700">$1</em>')
-      .replace(/`([^`]+)`/g, '<code class="px-1 py-0.5 rounded text-sm bg-gray-100 text-gray-800 font-mono">$1</code>')
-      .replace(/^\* (.*$)/gm, '<li class="ml-4 text-gray-800">• $1</li>')
-      .replace(/^- (.*$)/gm, '<li class="ml-4 text-gray-800">• $1</li>')
-      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-violet-600 hover:text-violet-800 underline" target="_blank" rel="noopener noreferrer">$1</a>')
+      .replace(/\*\*(.*?)\*\*/g, '<strong class="text-gray-900 font-semibold">$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em class="text-gray-800">$1</em>')
+      .replace(/`([^`]+)`/g, '<code class="px-1 py-0.5 rounded text-sm bg-gray-200 text-gray-900 font-mono">$1</code>')
+      .replace(/^\* (.*$)/gm, '<li class="ml-4 text-gray-900">• $1</li>')
+      .replace(/^- (.*$)/gm, '<li class="ml-4 text-gray-900">• $1</li>')
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-blue-600 hover:text-blue-800 underline" target="_blank" rel="noopener noreferrer">$1</a>')
       .replace(/\n\n/g, '<br><br>')
       .replace(/\n/g, '<br>');
   };
@@ -1574,7 +1574,7 @@ export default function Chatbot() {
   };
 
   return (
-    <div className="min-h-screen flex bg-[#FFFAE2]">
+    <div className="min-h-screen flex bg-white">
       {error && (
         <div className="fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg z-50">
           <div className="flex items-center justify-between">
@@ -1586,18 +1586,18 @@ export default function Chatbot() {
         </div>
       )}
 
-      <div className={`${showSidebar ? 'w-64' : 'w-16'} transition-all duration-300 bg-[#FFFAE2] border-r border-gray-200 flex flex-col fixed left-0 top-0 bottom-0 z-10`}>
-        <div className="p-3 border-b border-gray-200">
+      <div className={`${showSidebar ? 'w-64' : 'w-16'} transition-all duration-300 bg-white border-r border-gray-300 flex flex-col fixed left-0 top-0 bottom-0 z-10`}>
+        <div className="p-3 border-b border-gray-300">
           <div className="flex items-center justify-between">
             <button
               onClick={() => setShowSidebar(!showSidebar)}
-              className="p-2 rounded-lg hover:bg-[#F2C34F] transition-colors"
+              className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
             >
-              <Menu className="h-5 w-5 text-gray-600" />
+              <Menu className="h-5 w-5 text-gray-900" />
             </button>
             {showSidebar && (
-              <button className="p-2 rounded-lg hover:bg-[#F2C34F] transition-colors">
-                <Search className="h-5 w-5 text-gray-600" />
+              <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                <Search className="h-5 w-5 text-gray-900" />
               </button>
             )}
           </div>
@@ -1606,7 +1606,7 @@ export default function Chatbot() {
         <div className="p-3">
           <button
             onClick={createNewChat}
-            className={`${showSidebar ? 'w-full justify-start px-3 py-2' : 'w-8 h-8 justify-center p-0'} flex items-center space-x-2 rounded-lg hover:bg-[#F2C34F] transition-colors text-gray-700`}
+            className={`${showSidebar ? 'w-full justify-start px-3 py-2' : 'w-8 h-8 justify-center p-0'} flex items-center space-x-2 rounded-lg hover:bg-gray-100 transition-colors text-gray-900`}
           >
             <Edit className="h-4 w-4 flex-shrink-0" />
             {showSidebar && <span className="text-sm font-medium">New chat</span>}
@@ -1616,33 +1616,33 @@ export default function Chatbot() {
         {showSidebar && (
           <>
             <div className="px-4 pb-3">
-              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Gems</h3>
+              <h3 className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-2">Gems</h3>
               <div className="space-y-1">
-                <button className="w-full flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-[#F2C34F] transition-colors text-left">
-                  <BookOpen className="h-4 w-4 text-teal-600" />
-                  <span className="text-sm text-gray-700">Campaign Creator</span>
+                <button className="w-full flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors text-left">
+                  <BookOpen className="h-4 w-4 text-blue-600" />
+                  <span className="text-sm text-gray-900">Campaign Creator</span>
                 </button>
-                <button className="w-full flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-[#F2C34F] transition-colors text-left">
+                <button className="w-full flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors text-left">
                   <Compass className="h-4 w-4 text-gray-600" />
-                  <span className="text-sm text-gray-700">Explore Gems</span>
+                  <span className="text-sm text-gray-900">Explore Gems</span>
                 </button>
               </div>
             </div>
 
             <div className="flex-1 overflow-y-auto px-3">
-              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Recent</h3>
+              <h3 className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-2">Recent</h3>
               <div className="space-y-1">
                 {sessionsLoading ? (
                   <div className="py-4 text-center">
                     <div className="flex items-center justify-center space-x-2">
-                      <div className="w-2 h-2 rounded-full animate-bounce bg-violet-400" style={{ animationDelay: '0ms' }} />
-                      <div className="w-2 h-2 rounded-full animate-bounce bg-violet-400" style={{ animationDelay: '150ms' }} />
-                      <div className="w-2 h-2 rounded-full animate-bounce bg-violet-400" style={{ animationDelay: '300ms' }} />
+                      <div className="w-2 h-2 rounded-full animate-bounce bg-blue-500" style={{ animationDelay: '0ms' }} />
+                      <div className="w-2 h-2 rounded-full animate-bounce bg-blue-500" style={{ animationDelay: '150ms' }} />
+                      <div className="w-2 h-2 rounded-full animate-bounce bg-blue-500" style={{ animationDelay: '300ms' }} />
                     </div>
-                    <p className="text-xs text-gray-400 mt-2">Loading chats...</p>
+                    <p className="text-xs text-gray-500 mt-2">Loading chats...</p>
                   </div>
                 ) : chatSessions.length === 0 ? (
-                  <p className="text-xs text-gray-400 py-4">No recent conversations</p>
+                  <p className="text-xs text-gray-500 py-4">No recent conversations</p>
                 ) : (
                   chatSessions.map((session) => (
                     <div key={session.id} className="group relative">
@@ -1650,8 +1650,8 @@ export default function Chatbot() {
                         onClick={() => loadChat(session.id)}
                         className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
                           currentSessionId === session.id
-                            ? 'bg-gray-100'
-                            : 'hover:bg-gray-50'
+                            ? 'bg-blue-100'
+                            : 'hover:bg-gray-100'
                         }`}
                       >
                         <div className="text-sm text-gray-900 truncate">
@@ -1660,7 +1660,7 @@ export default function Chatbot() {
                       </button>
                       <button
                         onClick={() => deleteChat(session.id)}
-                        className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-gray-200 text-gray-400 hover:text-gray-600 transition-all"
+                        className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-gray-200 text-gray-500 hover:text-gray-700 transition-all"
                       >
                         <Trash2 className="h-3 w-3" />
                       </button>
@@ -1670,10 +1670,10 @@ export default function Chatbot() {
               </div>
             </div>
 
-            <div className="p-3 border-t border-gray-200">
+            <div className="p-3 border-t border-gray-300">
               <button className="w-full flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors text-left">
                 <Settings className="h-4 w-4 text-gray-600" />
-                <span className="text-sm text-gray-700">Settings and help</span>
+                <span className="text-sm text-gray-900">Settings and help</span>
               </button>
             </div>
           </>
@@ -1681,34 +1681,31 @@ export default function Chatbot() {
       </div>
 
       <div className={`flex-1 flex flex-col ${showSidebar ? 'ml-64' : 'ml-16'} transition-all duration-300`}>
-        <div className="flex-1 overflow-y-auto p-6 pb-32">
+        <div className="flex-1 overflow-y-auto p-6 pb-32 bg-white">
           {messages.length === 0 && (
             <div className="text-center py-16">
               <h1 className="text-4xl font-bold text-gray-900 mb-4">
-                Welcome to Relatus.AI
+                Welcome to CampaignAI
               </h1>
-              <p className="text-gray-600 max-w-md mx-auto leading-relaxed mb-8">
+              <p className="text-gray-700 max-w-md mx-auto leading-relaxed mb-8">
                 Your intelligent marketing campaign assistant. Generate strategies, copy, and visuals in seconds.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
                 {[{
-                  bg: '#9ECAD6',
-                  iconBg: '#9ECAD6',
-                  icon: <MessageSquare className="h-6 w-6" />,
+                  bg: '#E3F2FD',
+                  icon: <MessageSquare className="h-6 w-6 text-blue-600" />,
                   title: 'Create Campaigns',
                   desc: 'Generate complete campaign packages with strategy, copy, and visuals'
                 },
                 {
-                  bg: '#F5CBCB',
-                  iconBg: '#F5CBCB',
-                  icon: <Upload className="h-6 w-6 " />,
+                  bg: '#E3F2FD',
+                  icon: <Upload className="h-6 w-6 text-blue-600" />,
                   title: 'Upload Briefs',
                   desc: 'Analyze documents and generate targeted marketing content'
                 },
                 {
-                  bg: '#F2C34F',
-                  iconBg: '#F2C34F',
-                  icon: <ImageIcon className="h-6 w-6 " />,
+                  bg: '#E3F2FD',
+                  icon: <ImageIcon className="h-6 w-6 text-blue-600" />,
                   title: 'Visual Generation',
                   desc: 'Create stunning visuals with AI-powered image generation'
                 }].map((card, i) => (
@@ -1725,14 +1722,11 @@ export default function Chatbot() {
                         minHeight: '200px',  
                       }}
                     >
-                      <div
-                        className="w-12 h-12 rounded-lg flex items-center justify-center mb-4"
-                        style={{ background: card.iconBg }}
-                      >
+                      <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4 bg-white">
                         {card.icon}
                       </div>
                       <h4 className="font-semibold text-gray-900 mb-2">{card.title}</h4>
-                      <p className="text-sm text-gray-600">{card.desc}</p>
+                      <p className="text-sm text-gray-700">{card.desc}</p>
                     </div>
                   </GlowingEffect>
                 ))}
@@ -1745,14 +1739,14 @@ export default function Chatbot() {
               <GlowingEffect>
                 <div className={`max-w-xs lg:max-w-3xl px-3 py-2 rounded-2xl ${
                   message.type === 'user'
-                    ? 'bg-[#76BDC3] text-white'
-                    : ' text-gray-900 border border-gray-200 shadow-sm'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 text-gray-900 border border-gray-300 shadow-sm'
                 }`}>
-                  <div className="flex items-start space-x-3 ">
-                    <div className="flex-1 ">
+                  <div className="flex items-start space-x-3">
+                    <div className="flex-1">
                       {message.file && (
                         <div className={`mb-3 p-3 rounded-lg ${
-                          message.type === 'user' ? 'bg-violet-500/50' : 'bg-gray-50'
+                          message.type === 'user' ? 'bg-blue-500/50' : 'bg-white'
                         } flex items-center space-x-2`}>
                           {message.file.type.startsWith('image/') ? (
                             <ImageIcon className="h-4 w-4" />
@@ -1774,14 +1768,14 @@ export default function Chatbot() {
                           <div className="flex space-x-2">
                             <button
                               onClick={() => saveEditedMessage(message.id)}
-                              className="flex items-center space-x-1 px-3 py-1  text-white rounded-lg hover:bg-violet-700 text-sm"
+                              className="flex items-center space-x-1 px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
                             >
                               <Save className="h-3 w-3" />
                               <span>Save</span>
                             </button>
                             <button
                               onClick={cancelEditing}
-                              className="flex items-center space-x-1 px-3 py-1 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 text-sm"
+                              className="flex items-center space-x-1 px-3 py-1 bg-gray-300 text-gray-900 rounded-lg hover:bg-gray-400 text-sm"
                             >
                               <X className="h-3 w-3" />
                               <span>Cancel</span>
@@ -1812,14 +1806,13 @@ export default function Chatbot() {
                             )}
                           {message.imageData && (
                             <div className="mt-4 space-y-3">
-                              <div className="rounded-lg overflow-hidden border border-gray-200 shadow-md">
+                              <div className="rounded-lg overflow-hidden border border-gray-300 shadow-md">
                                 <img
                                   src={`http://localhost:3005/${message.imageData.path.replace(/\\/g, '/')}`}
                                   alt="Generated campaign visual"
                                   className="w-full h-auto"
                                   onError={(e) => {
                                     console.error('Image failed to load:', message.imageData?.path);
-                                    console.log('Attempted URL:', `http://localhost:3005/${message.imageData?.path}`);
                                     e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect fill="%23f3f4f6" width="400" height="300"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" fill="%236b7280" font-size="16"%3EImage not available%3C/text%3E%3C/svg%3E';
                                   }}
                                 />
@@ -1844,7 +1837,7 @@ export default function Chatbot() {
                         <div className="flex items-center space-x-2 mt-3 bg-white">
                           <button
                             onClick={() => isSpeaking ? stopSpeaking() : speakText(message.content)}
-                            className="p-2 rounded-lg bg-white hover:bg-gray-100 text-gray-500 hover:text-gray-700 transition-all"
+                            className="p-2 rounded-lg bg-white hover:bg-gray-200 text-gray-600 hover:text-gray-900 transition-all"
                           >
                             {isSpeaking ? (
                               <VolumeX className="h-4 w-4" />
@@ -1854,12 +1847,12 @@ export default function Chatbot() {
                           </button>
                           <button
                             onClick={() => startEditingMessage(message.id, message.content)}
-                            className="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-gray-700 transition-all"
+                            className="p-2 rounded-lg hover:bg-gray-200 text-gray-600 hover:text-gray-900 transition-all"
                           >
                             <Edit className="h-4 w-4" />
                           </button>
                           {message.agentType && (
-                            <span className="text-xs px-2 py-1  rounded-full font-medium">
+                            <span className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full font-medium">
                               {message.agentType === 'full_campaign' ? 'Full Campaign' : 
                                message.agentType === 'strategy' ? 'Strategy' :
                                message.agentType === 'copywriting' ? 'Copy' :
@@ -1868,7 +1861,7 @@ export default function Chatbot() {
                             </span>
                           )}
                           {message.isEdited && (
-                            <span className="text-xs text-gray-500">Edited</span>
+                            <span className="text-xs text-gray-600">Edited</span>
                           )}
                         </div>
                       )}
@@ -1882,13 +1875,13 @@ export default function Chatbot() {
           {isTyping && (
             <div className="flex justify-start mb-6">
               <GlowingEffect>
-                <div className="px-5 py-4 rounded-2xl bg-white border border-gray-200 shadow-sm flex items-center space-x-3">
+                <div className="px-5 py-4 rounded-2xl bg-gray-100 border border-gray-300 shadow-sm flex items-center space-x-3">
                   <div className="flex space-x-1">
-                    <div className="w-2 h-2 rounded-full animate-bounce bg-violet-400" style={{ animationDelay: '0ms' }} />
-                    <div className="w-2 h-2 rounded-full animate-bounce bg-violet-400" style={{ animationDelay: '150ms' }} />
-                    <div className="w-2 h-2 rounded-full animate-bounce bg-violet-400" style={{ animationDelay: '300ms' }} />
+                    <div className="w-2 h-2 rounded-full animate-bounce bg-blue-500" style={{ animationDelay: '0ms' }} />
+                    <div className="w-2 h-2 rounded-full animate-bounce bg-blue-500" style={{ animationDelay: '150ms' }} />
+                    <div className="w-2 h-2 rounded-full animate-bounce bg-blue-500" style={{ animationDelay: '300ms' }} />
                   </div>
-                  <span className="text-sm text-gray-500">Generating campaign...</span>
+                  <span className="text-sm text-gray-700">Generating campaign...</span>
                 </div>
               </GlowingEffect>
             </div>
@@ -1897,10 +1890,10 @@ export default function Chatbot() {
           <div ref={messagesEndRef} />
         </div>
 
-        <div className={`fixed bottom-0 right-0 ${showSidebar ? 'left-64' : 'left-16'} transition-all duration-300 p-6 border-t border-gray-200 bg-[#FFFAE2] z-10`}>
+        <div className={`fixed bottom-0 right-0 ${showSidebar ? 'left-64' : 'left-16'} transition-all duration-300 p-6 border-t border-gray-300 bg-white z-10`}>
           {uploadedFile && (
             <GlowingEffect>
-              <div className="mb-4 p-4 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-between">
+              <div className="mb-4 p-4 rounded-xl bg-gray-100 border border-gray-300 flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   {uploadedFile.type.startsWith('image/') ? (
                     <ImageIcon className="h-5 w-5 text-gray-600" />
@@ -1911,7 +1904,7 @@ export default function Chatbot() {
                 </div>
                 <button
                   onClick={() => setUploadedFile(null)}
-                  className="p-1.5 rounded-lg hover:bg-gray-200 text-gray-500 hover:text-gray-700 transition-all"
+                  className="p-1.5 rounded-lg hover:bg-gray-200 text-gray-600 hover:text-gray-900 transition-all"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -1923,7 +1916,7 @@ export default function Chatbot() {
             <GlowingEffect>
               <button
                 onClick={() => fileInputRef.current?.click()}
-                className="p-3 rounded-xl bg-[#F5CBCB]  flex items-center justify-center  hover:border-2 border-black"
+                className="p-3 rounded-xl bg-white border-2 border-black text-gray-900 flex items-center justify-center hover:bg-gray-100"
               >
                 <Paperclip className="h-5 w-5" />
               </button>
@@ -1932,10 +1925,10 @@ export default function Chatbot() {
             <GlowingEffect>
               <button
                 onClick={isListening ? stopListening : startListening}
-                className={`p-3 rounded-xl flex items-center justify-center hover:border-2 border-black ${
+                className={`p-3 rounded-xl flex items-center justify-center border-2 border-black ${
                   isListening
-                    ? 'bg-red-500 hover:bg-red-600 '
-                    : 'bg-[#F5CBCB] hover:bg-[#F5CBCB]/90 '
+                    ? 'bg-red-600 hover:bg-red-700 text-white'
+                    : 'bg-white hover:bg-gray-100 text-gray-900'
                 }`}
               >
                 {isListening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
@@ -1953,8 +1946,8 @@ export default function Chatbot() {
                   }
                 }}
                 placeholder="Describe your campaign or marketing brief..."
-                className={`w-full px-5 py-2 rounded-2xl border border-gray-300 text-black placeholder-gray-500
-                  hover:border-black focus:border-black focus:ring-0`}
+                className={`w-full px-5 py-2 rounded-2xl border-2 border-black text-gray-900 placeholder-gray-500
+                  hover:border-black focus:border-black focus:ring-0 bg-white`}
                 rows={1}
               />
             </GlowingEffect>
@@ -1963,10 +1956,10 @@ export default function Chatbot() {
               <button
                 onClick={() => sendMessage()}
                 disabled={!inputText.trim() && !uploadedFile}
-                className={`p-3 rounded-xl flex items-center justify-center  hover:border-2 border-black ${
+                className={`p-3 rounded-xl flex items-center justify-center border-2 border-black ${
                   inputText.trim() || uploadedFile
-                    ? 'bg-[#9ECAD6] hover:bg-[#9ECAD6]/90 shadow-md'
-                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                    ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-md'
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 }`}
               >
                 <Send className="h-5 w-5" />

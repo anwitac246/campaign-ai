@@ -1,0 +1,17 @@
+<!-- Save as campaignai-icon.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="iconTitle">
+  <title id="iconTitle">CampaignAI icon</title>
+  <rect width="100%" height="100%" rx="32" fill="#ffffff"/>
+  <!-- rounded square background -->
+  <rect x="8" y="8" width="240" height="240" rx="28" fill="#0F172A"/>
+  <!-- simplified megaphone -->
+  <g transform="translate(36,44) scale(1.2)">
+    <path d="M12 72 L64 40 L64 120 L12 88 Z" fill="#ffffff"/>
+    <path d="M64 44 L108 24 L108 116 L64 96 Z" fill="#06B6D4"/>
+    <rect x="4" y="86" width="10" height="18" rx="2" fill="#ffffff"/>
+    <!-- small signal bar -->
+    <rect x="140" y="56" width="8" height="18" rx="2" fill="#ffd166" transform="rotate(-10 140 56)"/>
+    <rect x="126" y="44" width="8" height="30" rx="2" fill="#ffd166" transform="rotate(-10 126 44)"/>
+    <rect x="112" y="32" width="8" height="42" rx="2" fill="#ffd166" transform="rotate(-10 112 32)"/>
+  </g>
+</svg>
